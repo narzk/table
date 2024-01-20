@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>8-Column Table with Clickable Cells</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0 10%;
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0; /* Set background color as per your preference */
+      }
+
+      .t-main {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .t-main th,
+      .t-main td {
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #ddd; /* Set border color as per your preference */
+        cursor: pointer;
+      }
+
+      .t-main th {
+        background-color: #4caf50; /* Set header background color as per your preference */
+        color: white; /* Set header text color as per your preference */
+      }
+
+      .t-main tr:nth-child(even) {
+        background-color: #f2f2f2; /* Set even row background color as per your preference */
+      }
+
+      .truth-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .truth-table th,
+      .truth-table td {
+        padding: 1px;
+        text-align: center;
+        border: 1px solid #ddd; /* Set border color as per your preference */
+        cursor: pointer;
+      }
+
+      .truth-table th {
+        background-color: #f1f5f2; /* Set header background color as per your preference */
+        color: #000; /* Set header text color as per your preference */
+      }
+
+      .truth-table tr:nth-child(even) {
+        background-color: #f2f2f2; /* Set even row background color as per your preference */
+      }
+      /* Modal Styling */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        padding: 20px;
+        border: 1px solid #ddd;
+        max-width: 80%;
+        margin: auto;
+      }
+      #closeModal {
+        cursor: pointer;
+      }
+      td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 10px;
+        max-height: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <table class="t-main">
+      <thead>
+        <tr>
+          <th>Motif</th>
+          <th>Description</th>
+          <th>graph</th>
+          <th>Bio Figure</th>
+          <th>Truth table level 2</th>
+          <th>Truth table level 3</th>
+          <th>BioRECIPE format</th>
+          <th>Bio Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Add more rows as needed -->
+        <tr>
+          <td>NOT</td>
+          <td>Provides the opposite value of a variable.</td>
+          <td>Data 3</td>
+          <td>Data 4</td>
+          <td>
+            <table class="truth-table">
+              <tr>
+                <th>A</th>
+                <th>A'</th>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <table class="truth-table">
+             <!-- NOT -->
+                <tr>
+                <th>A</th>
+                <th>A'</th>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>0</td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <h3>
+              Prompt: Can you find me an example in biomedical literature of a
+              human gene regulatory event where "A" negatively influences "B" ?
+              like B=!A
+            </h3>
+            <p>
+             <ol>
+                <li>
+                    Repressor-operator systems: 
+                    <ul>
+                        <li>
+                            Gene A: LacI (repressor) 
+                        </li>
+                        <li>
+                            Gene B: lac operon (cluster of genes controlled by LacI) 
+                        </li>
+                        <li>
+                            Regulatory mechanism: LacI protein binds to a specific DNA sequence (operator) on the lac operon, physically preventing RNA polymerase from accessing and transcribing the genes. In the absence of LacI (or when it's bound to lactose, blocking its DNA binding), the lac operon is expressed. 
+                        </li>
+                        <li>
+                            Functional significance: This system in bacteria exemplifies a "B=!A" relationship, where LacI (A) completely abolishes the expression of the lac operon (B) when bound. However, it's worth noting that this is a bacterial example, so while insightful, it may not directly translate to human gene regulation. 
+                        </li>
+                    </ul>
+                </li><li>
+                    Dominant negative mutations:
+                    <ul>
+                        <li>
+                            Gene A: Wild-type allele 
+                        </li>
+                        <li>
+                            Gene B: Mutant allele of A exhibiting dominant negative effect 
+                        </li>
+                        <li>
+                            Regulatory mechanism: The mutant allele encodes a protein that can still bind to regulatory elements like the wild-type protein, but lacks the necessary function to activate transcription. Consequently, the mutant allele competes with the wild-type protein for binding, hindering gene expression even when wild-type is present. 
+                        </li>
+                        <li>
+                            Functional significance: Dominant negative mutations can mimic a "B=!A" scenario in that they completely nullify the action of the wild-type allele when present in one copy. This phenomenon can contribute to various human diseases, like retinoblastoma caused by mutations in the RB1 gene. 
+                        </li>
+                    </ul>
+                </li>
+                <li> miRNA-induced silencing: 
+
+                    <ul>
+                        <li>
+                            Gene A: miRNA targeting a specific mRNA sequence 
+                        </li>
+                        <li>
+                            Gene B: The targeted mRNA 
+                        </li>
+                        <li>
+                            Regulatory mechanism: miRNAs bind perfectly or imperfectly to complementary sequences within the 3' UTR of target mRNAs, leading to translational repression or mRNA degradation. In cases of perfect complementarity, the miRNA-mRNA complex can be recognized by the cellular machinery and targeted for degradation, essentially eliminating the mRNA and its protein product. 
+                        </li>
+                        <li>
+                            Functional significance: This pathway can achieve a "B=!A" effect, especially when the miRNA expression is very high and leads to near-complete degradation of the target mRNA. It plays a crucial role in numerous biological processes and human diseases. 
+
+ 
+                        </li>
+                    </ul>
+                </li>
+             </ol>
+            </p>
+          </td>
+          <td>!A^</td>
+        </tr>
+<!-- positive weak -->
+<tr>
+    <td>Positive Weak </td>
+    <td>Provides the opposite value of a variable.</td>
+    <td>Data 3</td>
+    <td>Data 4</td>
+    <td>
+      <table class="truth-table">
+        <tr>
+          <th>A</th>
+          <th>C</th>
+        </tr>
+        <tr>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="truth-table">
+          <tr>
+          <th>A</th>
+          <th>C</th>
+        </tr>
+        <tr>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>2</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <h3>
+        Can you find me an example in biomedical literature of a human gene regulatory event where "A" Positively influences "B" ? like B=A 
+      </h3>
+      <p>
+       <ol>
+          <li>
+            Transcription factors and target genes: 
+              <ul>
+                  <li>
+                    Gene A: TF (transcription factor) 
+                  </li>
+                  <li>
+                    Gene B: Target gene whose promoter contains TF binding sites 
+                  </li>
+                  <li>
+                    Regulatory mechanism: TF binds to specific DNA sequences within the promoter of gene B, recruiting RNA polymerase and other factors that activate transcription. This leads to increased mRNA and protein production of gene B. 
+                  </li>
+                  <li>
+                    Functional significance: This is a fundamental mechanism in gene regulation, enabling cells to respond to external stimuli or internal signals by selectively turning different genes on. Numerous examples exist, like MYOD promoting muscle-specific gene expression during myogenesis. 
+                  </li>
+              </ul>
+          </li><li>
+            Coactivators and transcription factors: 
+              <ul>
+                  <li>
+                    Gene A: Coactivator (protein that assists TFs) 
+                  </li>
+                  <li>
+                    Gene B: TF and its target gene 
+                  </li>
+                  <li>
+                    Regulatory mechanism: Coactivators physically interact with TFs and assist them in binding to DNA, stabilizing their interaction, and recruiting other components of the transcriptional machinery. This significantly enhances the TF's ability to activate gene expression, effectively boosting the output of gene B. 
+                  </li>
+                  <li>
+                    Functional significance: Coactivators can play crucial roles in specific biological processes by fine-tuning TF activity and ensuring precise control over gene expression. For instance, MED1, a coactivator, is essential for estrogen receptor-mediated gene expression in breast cancer. 
+                  </li>
+              </ul>
+          </li>
+          <li> Viral transactivators and host genes:  
+
+              <ul>
+                  <li>
+                    Gene A: Viral transactivator (protein encoded by a virus) 
+                  </li>
+                  <li>
+                    Gene B: Cellular gene containing viral binding sites 
+                  </li>
+                  <li>
+                    Regulatory mechanism: Viral transactivators bind to specific DNA sequences within the promoter of host genes, hijacking the cellular transcription machinery to drive expression of genes that benefit the virus, like those involved in replication or immune evasion. 
+                  </li>
+                  <li>
+                    Functional significance: This mechanism illustrates how viruses can manipulate host gene expression to their advantage, contributing to viral pathogenesis. HIV Tat protein is a classic example, activating several host genes involved in viral transcription and replication. 
+
+
+                  </li>
+              </ul>
+          </li>
+       </ol>
+      </p>
+    </td>
+    <td>A^</td>
+  </tr>
+<!-- negative weak -->
+
+<tr>
+    <td>Negative Weak  </td>
+    <td>-</td>
+    <td>Data 3</td>
+    <td>Data 4</td>
+    <td>
+      <table class="truth-table">
+        <tr>
+          <th>A</th>
+          <th>C</th>
+        </tr>
+        <tr>
+          <td>0</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>0</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="truth-table">
+          <tr>
+          <th>A</th>
+          <th>C</th>
+        </tr>
+        <tr>
+          <td>0</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>0</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <h3>
+        Prompt: Can you find me an example in biomedical literature of a human gene regulatory event where "A" negatively influences "B" ?  
+
+like B=!A 
+      </h3>
+      <p>
+       <ol>
+          <li>
+            Repressor-operator systems: 
+              <ul>
+                  <li>
+                    Gene A: LacI (repressor) 
+                  </li>
+                  <li>
+                    Gene B: lac operon (cluster of genes controlled by LacI) 
+                  </li>
+                  <li>
+                    Regulatory mechanism: LacI protein binds to a specific DNA sequence (operator) on the lac operon, physically preventing RNA polymerase from accessing and transcribing the genes. In the absence of LacI (or when it's bound to lactose, blocking its DNA binding), the lac operon is expressed. 
+                  </li>
+                  <li>
+                    Functional significance: This system in bacteria exemplifies a "B=!A" relationship, where LacI (A) completely abolishes the expression of the lac operon (B) when bound. However, it's worth noting that this is a bacterial example, so while insightful, it may not directly translate to human gene regulation. 
+                  </li>
+              </ul>
+          </li><li>
+            Dominant negative mutations: 
+              <ul>
+                  <li>
+                    Gene A: Wild-type allele 
+                  </li>
+                  <li>
+                    Gene B: Mutant allele of A exhibiting dominant negative effect 
+                  </li>
+                  <li>
+                    Regulatory mechanism: The mutant allele encodes a protein that can still bind to regulatory elements like the wild-type protein, but lacks the necessary function to activate transcription. Consequently, the mutant allele competes with the wild-type protein for binding, hindering gene expression even when wild-type is present. 
+                  </li>
+                  <li>
+                    Functional significance: Dominant negative mutations can mimic a "B=!A" scenario in that they completely nullify the action of the wild-type allele when present in one copy. This phenomenon can contribute to various human diseases, like retinoblastoma caused by mutations in the RB1 gene. 
+                  </li>
+              </ul>
+          </li>
+          <li>  miRNA-induced silencing:
+
+              <ul>
+                  <li>
+                    Gene A: miRNA targeting a specific mRNA sequence 
+                  </li>
+                  <li>
+                    Gene B: The targeted mRNA 
+                  </li>
+                  <li>
+                    Regulatory mechanism: miRNAs bind perfectly or imperfectly to complementary sequences within the 3' UTR of target mRNAs, leading to translational repression or mRNA degradation. In cases of perfect complementarity, the miRNA-mRNA complex can be recognized by the cellular machinery and targeted for degradation, essentially eliminating the mRNA and its protein product. 
+                  </li>
+                  <li>
+                    Functional significance: This pathway can achieve a "B=!A" effect, especially when the miRNA expression is very high and leads to near-complete degradation of the target mRNA. It plays a crucial role in numerous biological processes and human diseases.
+
+
+                  </li>
+              </ul>
+          </li>
+       </ol>
+      </p>
+    </td>
+    <td>!A^</td>
+  </tr>
+
+      </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal" id="myModal">
+      <div class="modal-content">
+        <span id="closeModal">&times;</span>
+        <p id="modalText">Modal Content Goes Here</p>
+      </div>
+    </div>
+
+    <script>
+      // Get all table cells
+      var cells = document.querySelectorAll("td");
+
+      // Add click event to each cell
+      cells.forEach(function (cell) {
+        cell.addEventListener("click", function () {
+          // Show modal on cell click
+          var modalText = document.getElementById("modalText");
+          
+          modalText.innerHTML = cell.innerHTML;
+          document.getElementById("myModal").style.display = "flex";
+        });
+      });
+
+      // Close modal when close button or outside the modal is clicked
+      document
+        .getElementById("closeModal")
+        .addEventListener("click", function () {
+          document.getElementById("myModal").style.display = "none";
+        });
+
+      window.addEventListener("click", function (event) {
+        if (event.target == document.getElementById("myModal")) {
+          document.getElementById("myModal").style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>
